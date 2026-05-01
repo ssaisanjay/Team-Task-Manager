@@ -67,17 +67,19 @@ npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## 🌐 Deployment to Railway
+## 🌐 Deployment to Vercel
 
-This project is fully configured to deploy seamlessly to [Railway](https://railway.app/) using `NIXPACKS`.
+This project is built on Next.js, making Vercel the most native and seamless deployment platform.
 
 1. Push your code to a GitHub repository.
-2. Log into Railway and select **New Project** -> **Deploy from GitHub repo**.
-3. Select your repository.
-4. Go to the **Variables** tab in your new Railway project and add your `DATABASE_URL` and `JWT_SECRET`.
-5. Go to the **Settings** tab and generate a public domain.
+2. Log into [Vercel](https://vercel.com/) and click **Add New** -> **Project**.
+3. Import your GitHub repository.
+4. Open the **Environment Variables** section during setup and add:
+   - `DATABASE_URL`: Your MongoDB connection string.
+   - `JWT_SECRET`: A secure random string for tokens.
+5. Click **Deploy**.
 
-Your app will automatically build and deploy!
+Vercel will automatically build the Next.js app and provide a live production URL!
 
 ## 🛡️ License
 
