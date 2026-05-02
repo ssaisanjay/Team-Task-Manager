@@ -67,15 +67,4 @@ npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## 🌐 Deployment to Railway
-
-This project is fully configured to deploy seamlessly to [Railway](https://railway.app/) using `NIXPACKS`.
-
-1. Push your code to a GitHub repository.
-2. Log into Railway and select **New Project** -> **Deploy from GitHub repo**.
-3. Select your repository.
-4. Go to the **Variables** tab in your new Railway project and add your `DATABASE_URL` and `JWT_SECRET`.
-5. Go to the **Settings** tab and generate a public domain.
-
-Your app will automatically build and deploy!
 
