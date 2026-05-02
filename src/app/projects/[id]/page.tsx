@@ -4,7 +4,7 @@ import { useEffect, useState, use } from 'react';
 import { useAuth } from '@/components/AuthProvider';
 import { Plus, GripVertical, CheckCircle, Clock, CircleDashed } from 'lucide-react';
 
-type Task = { id: string; title: string; description: string; status: string; assigneeId?: string; assignee?: { name: string } };
+type Task = { id: string; title: string; description: string; status: string; dueDate?: string; assigneeId?: string; assignee?: { name: string } };
 
 export default function ProjectDetails({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
@@ -15,6 +15,7 @@ export default function ProjectDetails({ params }: { params: Promise<{ id: strin
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const [newTaskDesc, setNewTaskDesc] = useState('');
+  const [newTaskDueDate, setNewTaskDueDate] = useState('');
   const [newTaskAssignee, setNewTaskAssignee] = useState('');
   const [searchAssignee, setSearchAssignee] = useState('');
 
@@ -45,6 +46,7 @@ export default function ProjectDetails({ params }: { params: Promise<{ id: strin
         body: JSON.stringify({
           title: newTaskTitle,
           description: newTaskDesc,
+          dueDate: newTaskDueDate || undefined,
           projectId: resolvedParams.id,
           assigneeId: newTaskAssignee || null,
         }),
@@ -53,6 +55,7 @@ export default function ProjectDetails({ params }: { params: Promise<{ id: strin
         setShowTaskModal(false);
         setNewTaskTitle('');
         setNewTaskDesc('');
+        setNewTaskDueDate('');
         setNewTaskAssignee('');
         fetchProject();
       }
@@ -138,13 +141,30 @@ export default function ProjectDetails({ params }: { params: Promise<{ id: strin
                   </div>
                   {task.description && <p className="text-muted" style={{ fontSize: '0.85rem', marginBottom: '12px' }}>{task.description}</p>}
                   
-                  <div className="flex-between" style={{ marginTop: '12px' }}>
+                  <div className="flex-between" style={{ marginTop: '12px', flexWrap: 'wrap', gap: '8px' }}>
                     {task.assignee ? (
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'var(--bg-tertiary)', padding: '4px 8px', borderRadius: '4px', fontSize: '0.75rem' }}>
                         {task.assignee.name}
                       </div>
                     ) : (
                       <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Unassigned</div>
+                    )}
+                    
+                    {task.dueDate && (
+                      <div style={{
+                        display: 'flex', alignItems: 'center', gap: '4px', padding: '4px 8px', borderRadius: '4px', fontSize: '0.75rem',
+                        background: new Date(task.dueDate) < new Date() && task.status !== 'DONE' ? 'rgba(239, 68, 68, 0.15)' : 'var(--bg-tertiary)',
+                        color: new Date(task.dueDate) < new Date() && task.status !== 'DONE' ? '#ef4444' : 'var(--text-secondary)',
+                        fontWeight: new Date(task.dueDate) < new Date() && task.status !== 'DONE' ? '600' : 'normal'
+                      }}>
+                        <Clock size={12} />
+                        {new Date(task.dueDate).toLocaleDateString()}
+                        {new Date(task.dueDate) < new Date() && task.status !== 'DONE' && (
+                          <span style={{ marginLeft: '4px', background: '#ef4444', color: 'white', padding: '2px 4px', borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold' }}>
+                            OVERDUE
+                          </span>
+                        )}
+                      </div>
                     )}
                   </div>
                 </div>
@@ -166,6 +186,10 @@ export default function ProjectDetails({ params }: { params: Promise<{ id: strin
               <div>
                 <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.9rem' }}>Description</label>
                 <textarea value={newTaskDesc} onChange={e => setNewTaskDesc(e.target.value)} rows={3} />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.9rem' }}>Due Date</label>
+                <input type="date" value={newTaskDueDate} onChange={e => setNewTaskDueDate(e.target.value)} />
               </div>
               <div>
                 <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.9rem' }}>Assignee</label>

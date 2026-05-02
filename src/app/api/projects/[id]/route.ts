@@ -32,6 +32,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
         title: t.title,
         description: t.description,
         status: t.status,
+        dueDate: t.dueDate ? t.dueDate.toISOString() : null,
         projectId: t.project.toString(),
         assigneeId: t.assignee ? t.assignee._id.toString() : null,
         assignee: t.assignee ? { id: t.assignee._id.toString(), name: t.assignee.name } : null
